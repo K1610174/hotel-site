@@ -155,6 +155,31 @@ app.get('/', (req, res) => {
                 .bento-item.outdoor .bento-label p { color: var(--apollo-green); }
                 .suite-info { flex: 1; text-align: center; }
 
+                /* Amenities & Testimonials */
+                .amenities-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 30px;
+                    padding: 60px 5%;
+                    text-align: center;
+                }
+                .amenity-card svg { 
+                    width: 40px; height: 40px; fill: var(--apollo-green); 
+                    transition: var(--transition);
+                }
+                .amenity-card:hover svg {
+                    transform: scale(1.1);
+                    filter: drop-shadow(0 0 8px var(--apollo-green));
+                }
+                .amenity-card h4 { color: var(--apollo-orange); text-transform: uppercase; font-size: 0.8rem; margin-top: 15px; }
+                
+                .testimonials { padding: 100px 15%; text-align: center; }
+                .testimonial-item { margin-bottom: 60px; }
+                .testimonial-item blockquote { 
+                    font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: italic; color: #ccc; margin: 0 0 15px 0;
+                }
+                .testimonial-item cite { font-family: 'Inter', sans-serif; color: var(--apollo-red); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; }
+
                 .section-title { text-align: center; padding: 120px 0 60px; font-size: 2.5rem; text-transform: uppercase; }
 
                 .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
@@ -271,6 +296,42 @@ app.get('/', (req, res) => {
                 <div class="bento-item outdoor">
                     <img src="/pergola.jpg" alt="The Pergola Lounge">
                     <div class="bento-label"><h3>The Pergola Lounge</h3></div>
+                </div>
+            </section>
+
+            <section class="reveal">
+                <h2 class="section-title">Modern Amenities</h2>
+                <div class="amenities-grid">
+                    <div class="amenity-card">
+                        <svg viewBox="0 0 24 24"><path d="M12 21l-1.45-1.45c-5.15-5.15-8.55-8.55-8.55-12.55 0-3.1 2.45-5.55 5.55-5.55 1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.1 0 5.55 2.45 5.55 5.55 0 4-3.4 7.4-8.55 12.55l-1.45 1.45z" style="display:none;"/><path d="M12 18l-4.21-4.21c-1.17-1.17-1.79-2.73-1.79-4.39 0-3.42 2.78-6.2 6.2-6.2s6.2 2.78 6.2 6.2c0 1.66-.62 3.22-1.79 4.39l-4.21 4.21z" style="display:none;"/><path d="M12 3C7.03 3 3 7.03 3 12c0 2.48 1.01 4.73 2.64 6.36l1.41-1.41C5.85 15.75 5 13.98 5 12c0-3.87 3.13-7 7-7s7 3.13 7 7c0 1.98-.85 3.75-2.05 4.95l1.41 1.41C20.99 16.73 22 14.48 22 12c0-4.97-4.03-9-9-9zm0 4c-2.76 0-5 2.24-5 5 0 1.38.56 2.63 1.46 3.54l1.41-1.41C9.32 13.58 9 12.81 9 12c0-1.66 1.34-3 3-3s3 1.34 3 3c0 .81-.32 1.58-.87 2.13l1.41 1.41C16.44 14.63 17 13.38 17 12c0-2.76-2.24-5-5-5zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>
+                        <h4>High-Speed Wi-Fi</h4>
+                    </div>
+                    <div class="amenity-card">
+                        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                        <h4>24/7 Security</h4>
+                    </div>
+                    <div class="amenity-card">
+                        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                        <h4>Secure Parking</h4>
+                    </div>
+                    <div class="amenity-card">
+                        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+                        <h4>Full-Day Dining</h4>
+                    </div>
+                </div>
+            </section>
+
+            <hr style="border: 0; border-top: 1px solid #333; margin: 0 5%;">
+
+            <section class="testimonials reveal">
+                <h2 class="section-title">Guest Voices</h2>
+                <div class="testimonial-item">
+                    <blockquote>"The Pergola at sunset is the best view in Fort Portal."</blockquote>
+                    <cite>— Sarah M.</cite>
+                </div>
+                <div class="testimonial-item">
+                    <blockquote>"Perfect for remote work. The Wi-Fi never dropped once."</blockquote>
+                    <cite>— David K.</cite>
                 </div>
             </section>
 
