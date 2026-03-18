@@ -13,6 +13,8 @@ app.get('/', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>The Apollo Inn | Boutique Luxury</title>
             <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
             <style>
                 :root {
                     --charcoal: #050505;
@@ -131,6 +133,26 @@ app.get('/', (req, res) => {
                 .reveal.active { opacity: 1; transform: translateY(0); }
                 html { scroll-behavior: smooth; }
 
+                /* Flatpickr Custom Branding */
+                .flatpickr-calendar { background: #0a0a0a !important; border: 1px solid var(--apollo-red) !important; box-shadow: 0 0 20px rgba(255,136,0,0.2) !important; }
+                .flatpickr-day { color: #fff !important; }
+                .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
+                .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange,
+                .flatpickr-day.selected:focus, .flatpickr-day.selected:hover, .flatpickr-day.nextMonthDay.selected {
+                    background: var(--apollo-orange) !important; border-color: var(--apollo-orange) !important;
+                }
+                .flatpickr-day.inRange { background: rgba(255, 136, 0, 0.2) !important; box-shadow: none !important; }
+                .flatpickr-day.today { border-color: var(--apollo-green) !important; color: var(--apollo-green) !important; }
+                .flatpickr-months .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-weekday { fill: #fff !important; color: #fff !important; }
+                
+                .date-input-wrapper { position: relative; display: flex; align-items: center; }
+                .btn-clear { position: absolute; right: 10px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; text-transform: uppercase; opacity: 0; transition: opacity 0.3s ease; }
+                .date-input-wrapper:hover .btn-clear { opacity: 1; }
+                
+                .input-with-icon { position: relative; }
+                .input-with-icon input { padding-left: 35px !important; width: 100%; box-sizing: border-box; }
+                .input-with-icon::before { content: '📅'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--apollo-orange); font-size: 0.9rem; z-index: 5; }
+
                 @media (max-width: 768px) {
                     .booking-bar { position: fixed; bottom: 0; top: auto; flex-direction: column; width: 100%; box-sizing: border-box; padding: 15px; backdrop-filter: blur(10px); }
                     .hero-content h1 { font-size: 3rem; }
@@ -154,12 +176,19 @@ app.get('/', (req, res) => {
                 </div>
             </header>
 
-            <div class="booking-bar">
-                <div class="booking-field"><label>Check In</label><input type="date"></div>
-                <div class="booking-field"><label>Check Out</label><input type="date"></div>
-                <div class="booking-field"><label>Guests</label><input type="number" placeholder="2"></div>
-                <button class="btn-check">Check Availability</button>
-            </div>
+            <section style="background: #050505; padding: 40px 5%; border-bottom: 1px solid #222;">
+                <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap;">
+                    <div class="booking-field"><label>Arrival</label><input type="text" id="arrival" placeholder="DD-MM-YYYY" style="background: #0a0a0a; border: 1px solid #333; color: white; padding: 12px;"></div>
+                    <div class="booking-field"><label>Departure</label><input type="text" id="departure" placeholder="DD-MM-YYYY" style="background: #0a0a0a; border: 1px solid #333; color: white; padding: 12px;"></div>
+                    <div class="booking-field">
+                        <label>Guests</label>
+                        <select style="background: #0a0a0a; border: 1px solid #333; color: white; padding: 12px; height: 45px; appearance: none; -webkit-appearance: none;">
+                            <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option>
+                        </select>
+                    </div>
+                    <button style="background: #00FF00; color: #000; border: none; padding: 0 40px; height: 45px; font-weight: 800; letter-spacing: 2px; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,0,0.3);">RESERVE</button>
+                </div>
+            </section>
 
             <section id="suites" class="suites-section reveal">
                 <h2 class="section-title">Suites & Sanctuaries</h2>
@@ -218,7 +247,10 @@ app.get('/', (req, res) => {
                     <div>
                         <form style="display: flex; flex-direction: column; gap: 20px;">
                             <div class="booking-field"><label>Full Name</label><input type="text" placeholder="John Doe" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
-                            <div class="booking-field"><label>Check-in Date</label><input type="date" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="booking-field"><label>Arrival</label><div class="input-with-icon"><input type="text" id="check-in" placeholder="Arrival Date" style="border: 1px solid #333; outline: none; transition: 0.3s; background: transparent; color: white; padding: 10px;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div></div>
+                                <div class="booking-field"><label>Departure</label><div class="input-with-icon"><input type="text" id="check-out" placeholder="Departure Date" style="border: 1px solid #333; outline: none; transition: 0.3s; background: transparent; color: white; padding: 10px;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div></div>
+                            </div>
                             <div class="booking-field"><label>Number of Guests</label><input type="number" placeholder="2" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
                             <button type="button" style="background: #00FF00; color: #000; border: none; padding: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Request a Suite</button>
                         </form>
@@ -239,6 +271,26 @@ app.get('/', (req, res) => {
                 document.querySelectorAll('.reveal').forEach(el => {
                     observer.observe(el);
                 });
+
+                const arrivalPicker = flatpickr("#arrival", {
+                    dateFormat: "d-m-Y",
+                    minDate: "today",
+                    onChange: function(selectedDates, dateStr) { 
+                        departurePicker.set("minDate", dateStr); 
+                    }
+                });
+                const departurePicker = flatpickr("#departure", {
+                    dateFormat: "d-m-Y",
+                    minDate: "today"
+                });
+
+                const checkInPicker = flatpickr("#check-in", {
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    minDate: "today"
+                });
+
+                document.querySelectorAll('.btn-clear').forEach((btn, i) => btn.addEventListener('click', () => Array.isArray(fps) ? fps[i].clear() : fps.clear()));
             </script>
         </body>
         </html>
