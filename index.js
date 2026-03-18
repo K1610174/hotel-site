@@ -52,6 +52,15 @@ app.get('/', (req, res) => {
                 .nav-links .btn-book { border: 1px solid var(--apollo-green); padding: 8px 20px; margin-left: 40px; box-shadow: 0 0 10px var(--apollo-green); }
                 .nav-links .btn-book:hover { border-color: var(--apollo-orange); box-shadow: 0 0 15px var(--apollo-orange); }
                 
+                @keyframes pulse-orange {
+                    0% { box-shadow: 0 0 0 0 rgba(255, 136, 0, 0.4); }
+                    70% { box-shadow: 0 0 0 10px rgba(255, 136, 0, 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(255, 136, 0, 0); }
+                }
+                .btn-book {
+                    animation: pulse-orange 3s infinite;
+                }
+                
                 .hero {
                     height: 80vh;
                     display: flex;
@@ -109,6 +118,7 @@ app.get('/', (req, res) => {
                 .bento-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: var(--transition); }
                 .bento-item:hover img { opacity: 0.4; transform: scale(1.1); }
                 .bento-item:hover { border-color: var(--apollo-red); box-shadow: 0 0 25px var(--gold-glow); }
+                .bento-item.glow-green:hover { border-color: var(--apollo-green); box-shadow: 0 0 25px rgba(0, 255, 0, 0.4); }
                 .bento-label { position: absolute; bottom: 20px; left: 20px; z-index: 2; }
                 .bento-label h3 { margin: 0; font-size: 1.2rem; color: var(--white); }
                 .bento-label p { margin: 5px 0 0; font-size: 0.7rem; color: var(--apollo-red); text-transform: uppercase; letter-spacing: 2px; }
@@ -116,6 +126,10 @@ app.get('/', (req, res) => {
                 .suite-info { flex: 1; text-align: center; }
 
                 .section-title { text-align: center; padding: 120px 0 60px; font-size: 2.5rem; text-transform: uppercase; }
+
+                .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
+                .reveal.active { opacity: 1; transform: translateY(0); }
+                html { scroll-behavior: smooth; }
 
                 @media (max-width: 768px) {
                     .booking-bar { position: fixed; bottom: 0; top: auto; flex-direction: column; width: 100%; box-sizing: border-box; padding: 15px; backdrop-filter: blur(10px); }
@@ -147,7 +161,7 @@ app.get('/', (req, res) => {
                 <button class="btn-check">Check Availability</button>
             </div>
 
-            <section id="suites" class="suites-section">
+            <section id="suites" class="suites-section reveal">
                 <h2 class="section-title">Suites & Sanctuaries</h2>
                 
                 <div class="suite-card">
@@ -168,15 +182,15 @@ app.get('/', (req, res) => {
             </section>
 
             <h2 class="section-title" id="amenities">The Amenity Collection</h2>
-            <section class="bento-grid">
-                <div class="bento-item">
+            <section class="bento-grid reveal">
+                <div class="bento-item glow-green">
                     <img src="/bar.jpg" alt="The Obsidian Bar">
                     <div class="bento-label" id="bar">
                         <h3>The Obsidian Bar</h3>
                         <p>A sanctuary of shadow and gold</p>
                     </div>
                 </div>
-                <div class="bento-item">
+                <div class="bento-item glow-green">
                     <img src="/dining.jpg" alt="The Apollo Dining Room">
                     <div class="bento-label" id="dining"><h3>The Apollo Dining Room</h3></div>
                 </div>
@@ -192,6 +206,40 @@ app.get('/', (req, res) => {
                     <div class="bento-label"><h3>The Pergola Lounge</h3></div>
                 </div>
             </section>
+
+            <section id="reservations" class="reveal" style="background: #111; padding: 100px 5%; border-top: 1px solid #222;">
+                <h2 class="section-title" style="margin-top: 0;">Secure Your Sanctuary</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1200px; margin: 0 auto;">
+                    <div>
+                        <h3 style="color: var(--white); margin-bottom: 20px;">Get in Touch</h3>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">1200 Apollo Way<br>San Francisco, CA 94105</p>
+                        <p style="color: var(--apollo-red); font-size: 1.2rem; margin-top: 20px;">+1 (555) 010-8800</p>
+                    </div>
+                    <div>
+                        <form style="display: flex; flex-direction: column; gap: 20px;">
+                            <div class="booking-field"><label>Full Name</label><input type="text" placeholder="John Doe" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
+                            <div class="booking-field"><label>Check-in Date</label><input type="date" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
+                            <div class="booking-field"><label>Number of Guests</label><input type="number" placeholder="2" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
+                            <button type="button" style="background: #00FF00; color: #000; border: none; padding: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Request a Suite</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <script>
+                const observerOptions = { threshold: 0.1 };
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.reveal').forEach(el => {
+                    observer.observe(el);
+                });
+            </script>
         </body>
         </html>
     `);

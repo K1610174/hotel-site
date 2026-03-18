@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
+  "_comment": "This is the script for my MacBook development",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/K1610174/hotel-site.git"
