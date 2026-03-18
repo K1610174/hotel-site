@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
                     background-color: var(--charcoal);
                     color: var(--white);
                     line-height: 1.6;
+                    letter-spacing: 1px;
                     scroll-behavior: smooth;
                 }
                 h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 400; color: var(--gold); letter-spacing: 2px; }
@@ -80,7 +81,7 @@ app.get('/', (req, res) => {
 
                 .suites-section { padding: 100px 5%; }
                 .suite-card { display: flex; gap: 50px; margin-bottom: 80px; align-items: center; }
-                .suite-card:nth-child(even) { flex-direction: row-reverse; }
+                .suite-card:nth-child(even) { flex-direction: row-reverse; text-align: center; }
                 .suite-image { flex: 1.5; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); position: relative; }
                 .suite-image img { width: 100%; height: 500px; object-fit: cover; transition: var(--transition); }
                 .suite-image:hover img { transform: scale(1.05); filter: brightness(1.1); }
@@ -107,11 +108,13 @@ app.get('/', (req, res) => {
                 .bento-item:hover { border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
                 .bento-label { position: absolute; bottom: 20px; left: 20px; z-index: 2; }
                 .bento-label h3 { margin: 0; font-size: 1.2rem; color: var(--white); }
+                .bento-label p { margin: 5px 0 0; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+                .suite-info { flex: 1; text-align: center; }
 
-                .section-title { text-align: center; padding: 100px 0 60px; font-size: 2.5rem; text-transform: uppercase; }
+                .section-title { text-align: center; padding: 120px 0 60px; font-size: 2.5rem; text-transform: uppercase; }
 
                 @media (max-width: 768px) {
-                    .booking-bar { position: fixed; bottom: 0; top: auto; flex-direction: column; width: 100%; box-sizing: border-box; padding: 15px; }
+                    .booking-bar { position: fixed; bottom: 0; top: auto; flex-direction: column; width: 100%; box-sizing: border-box; padding: 15px; backdrop-filter: blur(10px); }
                     .hero-content h1 { font-size: 3rem; }
                     .suite-card { flex-direction: column !important; }
                     .bento-grid { grid-template-columns: 1fr 1fr; }
@@ -122,7 +125,7 @@ app.get('/', (req, res) => {
             <nav>
                 <a href="#" class="logo">Apollo Inn</a>
                 <div class="nav-links">
-                    <a href="#suites">Suites</a><a href="#dining">Dining</a><a href="#bar">Bar</a><a href="#" class="btn-book">Book Now</a>
+                    <a href="#suites">Suites</a><a href="#dining">Dining</a><a href="#bar">Bar</a><a href="#" class="btn-book">Reserve Your Stay</a>
                 </div>
             </nav>
 
@@ -160,19 +163,25 @@ app.get('/', (req, res) => {
                 </div>
             </section>
 
-            <h2 class="section-title">The Amenity Collection</h2>
+            <h2 class="section-title" id="amenities">The Amenity Collection</h2>
             <section class="bento-grid">
-                <div class="bento-item" id="bar">
+                <div class="bento-item">
                     <img src="/bar.jpg" alt="The Obsidian Bar">
-                    <div class="bento-label"><h3>The Obsidian Bar</h3></div>
+                    <div class="bento-label" id="bar">
+                        <h3>The Obsidian Bar</h3>
+                        <p>A sanctuary of shadow and gold</p>
+                    </div>
                 </div>
-                <div class="bento-item" id="dining">
+                <div class="bento-item">
                     <img src="/dining.jpg" alt="The Apollo Dining Room">
-                    <div class="bento-label"><h3>The Apollo Dining Room</h3></div>
+                    <div class="bento-label" id="dining"><h3>The Apollo Dining Room</h3></div>
                 </div>
                 <div class="bento-item">
                     <img src="/conference.jpg" alt="The Executive Atelier">
-                    <div class="bento-label"><h3>The Executive Atelier</h3></div>
+                    <div class="bento-label">
+                        <h3>The Executive Atelier</h3>
+                        <p>Where ambition meets absolute privacy</p>
+                    </div>
                 </div>
                 <div class="bento-item">
                     <img src="/pergola.jpg" alt="The Pergola Lounge">
