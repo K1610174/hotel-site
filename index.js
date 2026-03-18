@@ -15,9 +15,11 @@ app.get('/', (req, res) => {
             <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --charcoal: #1a1a1a;
-                    --gold: #d4af37;
-                    --gold-glow: rgba(212, 175, 55, 0.3);
+                    --charcoal: #0a0a0a;
+                    --apollo-red: #FF8800;
+                    --apollo-green: #00FF00;
+                    --apollo-orange: #FF8800;
+                    --gold-glow: rgba(196, 18, 48, 0.3);
                     --white: #ffffff;
                     --text-muted: #a0a0a0;
                     --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -31,7 +33,7 @@ app.get('/', (req, res) => {
                     letter-spacing: 1px;
                     scroll-behavior: smooth;
                 }
-                h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 400; color: var(--gold); letter-spacing: 2px; }
+                h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 400; color: var(--apollo-red); letter-spacing: 2px; }
                 nav {
                     display: flex;
                     position: sticky;
@@ -44,10 +46,11 @@ app.get('/', (req, res) => {
                     backdrop-filter: blur(10px);
                     border-bottom: 1px solid rgba(212, 175, 55, 0.1);
                 }
-                .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); text-decoration: none; text-transform: uppercase; }
+                .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--apollo-red); text-decoration: none; text-transform: uppercase; }
                 .nav-links a { color: var(--white); text-decoration: none; margin-left: 30px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-                .nav-links a:hover { color: var(--gold); }
-                .nav-links .btn-book { border: 1px solid var(--gold); padding: 8px 20px; margin-left: 40px; }
+                .nav-links a:hover { color: var(--apollo-orange); }
+                .nav-links .btn-book { border: 1px solid var(--apollo-green); padding: 8px 20px; margin-left: 40px; box-shadow: 0 0 10px var(--apollo-green); }
+                .nav-links .btn-book:hover { border-color: var(--apollo-orange); box-shadow: 0 0 15px var(--apollo-orange); }
                 
                 .hero {
                     height: 80vh;
@@ -60,7 +63,7 @@ app.get('/', (req, res) => {
                     background-position: center;
                 }
                 .hero-content h1 { font-size: 5rem; margin: 0; color: var(--white); }
-                .hero-content p { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); }
+                .hero-content p { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--apollo-red); }
 
                 .booking-bar {
                     background: var(--charcoal);
@@ -76,8 +79,8 @@ app.get('/', (req, res) => {
                 .booking-field { display: flex; flex-direction: column; flex: 1; text-align: left; }
                 .booking-field label { font-size: 0.7rem; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; letter-spacing: 1px; }
                 .booking-field input { background: transparent; border: 1px solid #444; color: white; padding: 10px; font-family: 'Inter'; }
-                .btn-check { background: var(--gold); color: var(--charcoal); border: none; padding: 12px 30px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; height: 42px; }
-                .btn-check:hover { background: #fff; }
+                .btn-check { background: var(--apollo-green); color: var(--charcoal); border: none; padding: 12px 30px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; height: 42px; box-shadow: 0 0 15px var(--apollo-green); }
+                .btn-check:hover { background: var(--apollo-orange); box-shadow: 0 0 20px var(--apollo-orange); }
 
                 .suites-section { padding: 100px 5%; }
                 .suite-card { display: flex; gap: 50px; margin-bottom: 80px; align-items: center; }
@@ -105,10 +108,11 @@ app.get('/', (req, res) => {
                 }
                 .bento-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: var(--transition); }
                 .bento-item:hover img { opacity: 0.4; transform: scale(1.1); }
-                .bento-item:hover { border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow); }
+                .bento-item:hover { border-color: var(--apollo-red); box-shadow: 0 0 25px var(--gold-glow); }
                 .bento-label { position: absolute; bottom: 20px; left: 20px; z-index: 2; }
                 .bento-label h3 { margin: 0; font-size: 1.2rem; color: var(--white); }
-                .bento-label p { margin: 5px 0 0; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+                .bento-label p { margin: 5px 0 0; font-size: 0.7rem; color: var(--apollo-red); text-transform: uppercase; letter-spacing: 2px; }
+                .bento-item.outdoor .bento-label p { color: var(--apollo-green); }
                 .suite-info { flex: 1; text-align: center; }
 
                 .section-title { text-align: center; padding: 120px 0 60px; font-size: 2.5rem; text-transform: uppercase; }
@@ -123,7 +127,7 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <nav>
-                <a href="#" class="logo">Apollo Inn</a>
+                <a href="#" class="logo"><img src='/logo.jpg' style='height: 60px;'></a>
                 <div class="nav-links">
                     <a href="#suites">Suites</a><a href="#dining">Dining</a><a href="#bar">Bar</a><a href="#" class="btn-book">Reserve Your Stay</a>
                 </div>
@@ -183,9 +187,10 @@ app.get('/', (req, res) => {
                         <p>Where ambition meets absolute privacy</p>
                     </div>
                 </div>
-                <div class="bento-item">
+                <div class="bento-item outdoor">
                     <img src="/pergola.jpg" alt="The Pergola Lounge">
                     <div class="bento-label"><h3>The Pergola Lounge</h3></div>
+                    <div class="bento-label"><p>Outdoor Serenity</p></div>
                 </div>
             </section>
         </body>
