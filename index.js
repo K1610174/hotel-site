@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
             <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
             <style>
                 :root {
-                    --charcoal: #0a0a0a;
+                    --charcoal: #050505;
                     --apollo-red: #FF8800;
                     --apollo-green: #00FF00;
                     --apollo-orange: #FF8800;
@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
                     padding: 1.2rem 5%;
                     background: rgba(26, 26, 26, 0.95);
                     backdrop-filter: blur(10px);
-                    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+                    border-bottom: 1px solid var(--apollo-red);
                 }
                 .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--apollo-red); text-decoration: none; text-transform: uppercase; }
                 .nav-links a { color: var(--white); text-decoration: none; margin-left: 30px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
@@ -190,7 +190,6 @@ app.get('/', (req, res) => {
                 <div class="bento-item outdoor">
                     <img src="/pergola.jpg" alt="The Pergola Lounge">
                     <div class="bento-label"><h3>The Pergola Lounge</h3></div>
-                    <div class="bento-label"><p>Outdoor Serenity</p></div>
                 </div>
             </section>
         </body>
