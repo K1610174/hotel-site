@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
                     --apollo-orange: #FF8800;
                     --gold-glow: rgba(196, 18, 48, 0.3);
                     --white: #ffffff;
-                    --text-muted: #a0a0a0;
+                    --text-muted: #888888;
                     --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
                 }
                 body {
@@ -127,7 +127,7 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <nav>
-                <a href="#" class="logo"><img src='/logo.jpg' style='height: 60px;'></a>
+                <a href="#" class="logo"><img src='/logo.jpg' style='height: 50px; filter: contrast(1.2);'></a>
                 <div class="nav-links">
                     <a href="#suites">Suites</a><a href="#dining">Dining</a><a href="#bar">Bar</a><a href="#" class="btn-book">Reserve Your Stay</a>
                 </div>
