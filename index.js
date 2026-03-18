@@ -93,15 +93,43 @@ app.get('/', (req, res) => {
                 .btn-check { background: var(--apollo-green); color: var(--charcoal); border: none; padding: 12px 30px; cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; height: 42px; box-shadow: 0 0 15px var(--apollo-green); }
                 .btn-check:hover { background: var(--apollo-orange); box-shadow: 0 0 20px var(--apollo-orange); }
 
-                .suites-section { padding: 100px 5%; }
-                .suite-card { display: flex; gap: 50px; margin-bottom: 80px; align-items: center; }
-                .suite-card:nth-child(even) { flex-direction: row-reverse; text-align: center; }
-                .suite-image { flex: 1.5; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); position: relative; }
-                .suite-image img { width: 100%; height: 500px; object-fit: cover; transition: var(--transition); }
-                .suite-image:hover img { transform: scale(1.05); filter: brightness(1.1); }
-                .suite-image:hover { box-shadow: 0 0 30px var(--gold-glow); border-color: var(--gold); }
-                .suite-info { flex: 1; }
-                .suite-info p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; }
+                .suites-grid {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                    grid-auto-rows: 300px;
+                    gap: 20px;
+                    padding: 0 5% 100px;
+                }
+                .suite-box { position: relative; overflow: hidden; border: 1px solid #222; }
+                .suite-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+                .suite-overlay {
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(5, 5, 5, 0.8);
+                    display: flex; flex-direction: column; justify-content: center; align-items: center;
+                    opacity: 0; transition: var(--transition); text-align: center; padding: 20px; box-sizing: border-box;
+                }
+                .suite-box:hover img { transform: scale(1.05); }
+                .suite-box:hover .suite-overlay { opacity: 1; }
+                .suite-overlay h3 { color: var(--apollo-orange); margin: 0 0 10px 0; font-size: 1.5rem; }
+                .suite-overlay p { color: var(--white); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+                .btn-view {
+                    padding: 8px 20px;
+                    border: 1px solid var(--apollo-green);
+                    color: var(--white);
+                    text-decoration: none;
+                    font-size: 0.7rem;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    transition: 0.3s;
+                }
+                .btn-view:hover { background: var(--apollo-green); color: #000; }
+
+                /* Bento Layout Logic */
+                .suite-artisan { grid-column: span 4; grid-row: span 2; }
+                .suite-pergola { grid-column: span 2; grid-row: span 1; }
+                .suite-safari { grid-column: span 2; grid-row: span 1; }
+
+                .suites-section { padding: 0 0 100px; }
 
                 .bento-grid {
                     display: grid;
@@ -192,20 +220,30 @@ app.get('/', (req, res) => {
 
             <section id="suites" class="suites-section reveal">
                 <h2 class="section-title">Suites & Sanctuaries</h2>
-                
-                <div class="suite-card">
-                    <div class="suite-image"><img src="/suite1.jpg" alt="The Apollo Suite"></div>
-                    <div class="suite-info">
-                        <h3>The Apollo Suite</h3>
-                        <p>Floor-to-ceiling city views and marble baths. Experience the pinnacle of urban luxury in our flagship residence.</p>
+                <div class="suites-grid">
+                    <div class="suite-box suite-artisan">
+                        <img src="/suite1.jpg" alt="The Artisan Studio">
+                        <div class="suite-overlay">
+                            <h3>The Artisan Studio</h3>
+                            <p>King Bed | Garden View</p>
+                            <a href="#" class="btn-view">View Details</a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="suite-card">
-                    <div class="suite-image"><img src="/suite2.jpg" alt="The Artisan Studio"></div>
-                    <div class="suite-info">
-                        <h3>The Artisan Studio</h3>
-                        <p>Hand-crafted furniture and a curated vinyl collection. A space designed for the creative soul seeking quiet inspiration.</p>
+                    <div class="suite-box suite-pergola">
+                        <img src="/suite2.jpg" alt="The Executive Pergola">
+                        <div class="suite-overlay">
+                            <h3>The Executive Pergola</h3>
+                            <p>Private Terrace | City Skyline</p>
+                            <a href="#" class="btn-view">View Details</a>
+                        </div>
+                    </div>
+                    <div class="suite-box suite-safari">
+                        <img src="/suite3.jpg" alt="The Safari Suite">
+                        <div class="suite-overlay">
+                            <h3>The Safari Suite</h3>
+                            <p>Luxury Soaking Tub | Panoramic Views</p>
+                            <a href="#" class="btn-view">View Details</a>
+                        </div>
                     </div>
                 </div>
             </section>
