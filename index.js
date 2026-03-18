@@ -236,24 +236,57 @@ app.get('/', (req, res) => {
                 </div>
             </section>
 
-            <section id="reservations" class="reveal" style="background: #111; padding: 100px 5%; border-top: 1px solid #222;">
-                <h2 class="section-title" style="margin-top: 0;">Secure Your Sanctuary</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1200px; margin: 0 auto;">
+            <section id="reservations" class="reveal" style="background: #0a0a0a; padding: 80px 5%; border-top: 1px solid #222;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1300px; margin: 0 auto;">
+                    <!-- Column 1: Details -->
                     <div>
-                        <h3 style="color: var(--white); margin-bottom: 20px;">Get in Touch</h3>
-                        <p style="color: var(--text-muted); font-size: 1.1rem;">1200 Apollo Way<br>San Francisco, CA 94105</p>
-                        <p style="color: var(--apollo-red); font-size: 1.2rem; margin-top: 20px;">+1 (555) 010-8800</p>
+                        <h3 style="color: var(--apollo-orange); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 25px;">Information Hub</h3>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--apollo-orange); margin: 0; font-size: 0.8rem; text-transform: uppercase;">Phone</h4>
+                            <p style="margin: 5px 0; color: #ccc;">(+256) 762 239 099<br>(+256) 752 695 755</p>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--apollo-orange); margin: 0; font-size: 0.8rem; text-transform: uppercase;">Email</h4>
+                            <p style="margin: 5px 0; color: #ccc;">apolloinnfortportal@gmail.com</p>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--apollo-orange); margin: 0; font-size: 0.8rem; text-transform: uppercase;">Location</h4>
+                            <p style="margin: 5px 0; color: #ccc;">Bwanika, Saaka, Fort Portal, Uganda</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--apollo-orange); margin: 0; font-size: 0.8rem; text-transform: uppercase;">Working Time</h4>
+                            <p style="margin: 5px 0; color: #ccc;">Everyday 24/7</p>
+                        </div>
+                        <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+                            <a href="https://instagram.com/apolloinnfortportal" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 10px; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px var(--apollo-orange)'" onmouseout="this.style.textShadow='none'">
+                                <svg style="width:18px; height:18px; fill:var(--apollo-green);" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                <span style="color: var(--apollo-orange); font-size: 0.9rem;">@apolloinnfortportal</span>
+                            </a>
+                            <a href="https://tiktok.com/@apolloinnfortportal" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 10px; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px var(--apollo-orange)'" onmouseout="this.style.textShadow='none'">
+                                <svg style="width:18px; height:18px; fill:var(--apollo-green);" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.59-1.01-.01 2.62-.02 5.24-.04 7.86-.02 2.04-.54 4.14-1.97 5.67-1.52 1.68-3.82 2.4-6.01 2.25-2.13-.11-4.21-1.17-5.33-3.01-1.17-1.88-1.38-4.39-.51-6.48.81-2.02 2.62-3.61 4.74-4.07.13-.03.26-.04.39-.06v4.29c-.12.04-.24.08-.36.13-.94.44-1.61 1.39-1.62 2.42-.01 1.1.6 2.16 1.59 2.64.9.47 2.02.46 2.9-.06.79-.44 1.28-1.31 1.3-2.22.02-4.43.01-8.86.02-13.29z"/></svg>
+                                <span style="color: var(--apollo-orange); font-size: 0.9rem;">@apolloinnfortportal</span>
+                            </a>
+                        </div>
                     </div>
+
+                    <!-- Column 2: The Form -->
                     <div>
+                        <h3 style="color: var(--apollo-orange); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 25px;">Get in Touch</h3>
                         <form style="display: flex; flex-direction: column; gap: 20px;">
-                            <div class="booking-field"><label>Full Name</label><input type="text" placeholder="John Doe" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                <div class="booking-field"><label>Arrival</label><div class="input-with-icon"><input type="text" id="check-in" placeholder="Arrival Date" style="border: 1px solid #333; outline: none; transition: 0.3s; background: transparent; color: white; padding: 10px;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div></div>
-                                <div class="booking-field"><label>Departure</label><div class="input-with-icon"><input type="text" id="check-out" placeholder="Departure Date" style="border: 1px solid #333; outline: none; transition: 0.3s; background: transparent; color: white; padding: 10px;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div></div>
-                            </div>
-                            <div class="booking-field"><label>Number of Guests</label><input type="number" placeholder="2" style="border: 1px solid #333; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='#FF8800'; this.style.boxShadow='0 0 10px #FF8800'" onblur="this.style.borderColor='#333'; this.style.boxShadow='none'"></div>
-                            <button type="button" style="background: #00FF00; color: #000; border: none; padding: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Request a Suite</button>
+                            <input type="text" placeholder="Name" style="background: transparent; border: 1px solid #FF8800; color: white; padding: 12px; outline: none;">
+                            <input type="email" placeholder="Email" style="background: transparent; border: 1px solid #FF8800; color: white; padding: 12px; outline: none;">
+                            <textarea placeholder="Message" rows="4" style="background: transparent; border: 1px solid #FF8800; color: white; padding: 12px; outline: none; font-family: inherit;"></textarea>
+                            <button type="button" style="background: #00FF00; color: #000; border: none; padding: 15px; font-weight: 700; text-transform: uppercase; cursor: pointer;">Send</button>
                         </form>
+                    </div>
+
+                    <!-- Column 3: The Map -->
+                    <div style="min-height: 300px;">
+                        <h3 style="color: var(--apollo-orange); text-transform: uppercase; font-size: 1.2rem; margin-bottom: 25px;">Our Location</h3>
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31915.16646879103!2d30.24864155!3d0.66077595!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1761199370000001%3A0x673005663f203933!2sFort%20Portal!5e0!3m2!1sen!2sug!4v1710000000000!5m2!1sen!2sug" 
+                            width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%); min-height: 250px;" allowfullscreen="" loading="lazy">
+                        </iframe>
                     </div>
                 </div>
             </section>
