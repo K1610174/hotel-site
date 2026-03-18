@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/K1610174/hotel-site#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "nodemailer": "^8.0.3",
+    "nodemon": "^3.1.14"
   }
 }

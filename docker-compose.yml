@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  apollo-inn:
+    build: .
+    container_name: apollo-titan-control
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    # Use nodemon for your continuous dev afternoon
+    command: npx nodemon index.js
