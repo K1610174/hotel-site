@@ -83,20 +83,8 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); curso
 .m-features li { font-size: 0.7rem; color: var(--apollo-orange); text-transform: uppercase; font-weight: 700; border-left: 2px solid var(--apollo-orange); padding-left: 10px; }
 
 /* LIGHT MODE MAP FOOTER */
-/* LIGHT MODE FOOTER MAP */
-footer { 
-    background: var(--obsidian); 
-    display: grid; 
-    grid-template-columns: 1fr 1fr 1.5fr; 
-    border-top: 1px solid #333; 
-}
-
-.f-map { 
-    height: 100%; 
-    min-height: 400px; 
-    background: #e5e3df; /* Warm grey base */
-    /* This filter makes the map pop without being 'neon' */
-    filter: saturate(0.8) contrast(1.1); 
-}
+footer { background: var(--obsidian); display: grid; grid-template-columns: 1fr 1fr 1.5fr; border-top: 1px solid #333; }
+.f-col { padding: 60px; border-right: 1px solid #222; }
+.f-map { filter: contrast(1.1) saturate(0.9); height: 100%; min-height: 400px; background: #e5e3df; }
 
 @media (max-width: 1000px) { footer { grid-template-columns: 1fr; } .m-highlight-side { display: none; } .m-box { height: auto; max-height: 90vh; } }
