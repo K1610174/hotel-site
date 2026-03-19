@@ -1,10 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
+const { Resend } = require('resend'); // High-speed HTTP Email API
 const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // --- 1. DATABASE CONNECTION (THE BRAIN) ---
 mongoose.connect(process.env.MONGO_URI)
@@ -28,38 +30,33 @@ const Booking = mongoose.model('Booking', bookingSchema);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- 4. EMAIL TRANSPORTER ---
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, 
-    auth: { 
-        user: process.env.GMAIL_USER, 
-        pass: process.env.GMAIL_PASS 
-    },
-    tls: { rejectUnauthorized: false }
-});
+// --- 4. ROUTES ---
 
-// --- 5. ROUTES ---
-
-// NEW: Check for blocked dates (The "Calendar Intelligence")
+// NEW: Calendar Intelligence (Fetch blocked dates for frontend)
 app.get('/booked-dates', async (req, res) => {
     try {
         const bookings = await Booking.find({ status: { $ne: 'cancelled' } });
-        res.json(bookings.map(b => ({ start: b.checkIn, end: b.checkOut })));
-    } catch (e) { res.status(500).json([]); }
+        const blocked = bookings.map(b => ({
+            start: b.checkIn.toISOString().split('T')[0],
+            end: b.checkOut.toISOString().split('T')[0]
+        }));
+        res.json(blocked);
+    } catch (e) {
+        res.status(500).json([]);
+    }
 });
 
-// UPDATED: Reserve Suite (Saves to DB + Sends Mission Brief)
+// UPDATED: Reserve Suite (Instant Response + Background Email)
 app.post('/reserve', async (req, res) => {
     const { guestName, gEmail, suiteType, checkIn, checkOut } = req.body;
     
+    // Pricing logic
     const pricing = { 'The Atelier': 120, 'The Studio': 100, 'The Loft': 150 };
     const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)) || 0;
-    const total = nights * (pricing[suiteType] || 0);
+    const total = (nights > 0 ? nights : 1) * (pricing[suiteType] || 0);
 
     try {
-        // A. SAVE TO MONGODB
+        // A. SAVE TO MONGODB (Instant)
         const newBooking = new Booking({
             guestName, gEmail, suiteType,
             checkIn: new Date(checkIn),
@@ -68,8 +65,11 @@ app.post('/reserve', async (req, res) => {
         });
         await newBooking.save();
 
-        // B. PREPARE QUICK REPLY LINK
-        const mailtoLink = `mailto:${gEmail}?subject=Booking Confirmed: Apollo Inn&body=Hello ${guestName},%0D%0A%0D%0AThis is to confirm your mission to Apollo Inn in the ${suiteType}.%0D%0A%0D%0ADates: ${checkIn} to ${checkOut}%0D%0ATotal: $${total}%0D%0A%0D%0AWe look forward to your arrival!`;
+        // B. RESPOND TO FRONTEND IMMEDIATELY (No waiting!)
+        res.json({ success: true, bookingId: newBooking._id });
+
+        // C. PREPARE EMAIL CONTENT
+        const mailtoLink = `mailto:${gEmail}?subject=Booking%20Confirmed%20-%20Apollo%20Inn&body=Hello%20${guestName},%0D%0A%0D%0AConfirmed:%20${suiteType}%0D%0ADates:%20${checkIn}%20to%20${checkOut}%0D%0ATotal:%20$${total}`;
 
         const htmlMissionBrief = `
             <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #333; background-color: #fff;">
@@ -84,7 +84,7 @@ app.post('/reserve', async (req, res) => {
                     <hr>
                     <h3>STAY DETAILS</h3>
                     <p><strong>SUITE:</strong> ${suiteType}</p>
-                    <p><strong>DATES:</strong> ${checkIn} to ${checkOut} (${nights} Nights)</p>
+                    <p><strong>DATES:</strong> ${checkIn} to ${checkOut}</p>
                     <p style="font-size: 20px; color: #FF8800;"><strong>TOTAL: $${total}</strong></p>
                     <div style="margin-top: 25px; text-align: center;">
                         <a href="${mailtoLink}" style="background-color: #FF8800; color: #000; padding: 15px 25px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">✅ APPROVE & REPLY</a>
@@ -94,34 +94,30 @@ app.post('/reserve', async (req, res) => {
             </div>
         `;
 
-        // C. RESPOND TO FRONTEND IMMEDIATELY
-        res.json({ success: true, bookingId: newBooking._id });
-
-        // D. TRANSMIT EMAIL IN BACKGROUND
-        transporter.sendMail({
-            from: `"Apollo Mission Control" <${process.env.GMAIL_USER}>`,
+        // D. FIRE-AND-FORGET EMAIL (Bypasses Render's SMTP blocks)
+        resend.emails.send({
+            from: 'Apollo Inn <onboarding@resend.dev>', // Replace with your domain later if you have one
             to: 'mandiek028@gmail.com',
             subject: `🚨 NEW MISSION: $${total} - ${guestName}`,
             html: htmlMissionBrief
-        }).catch(err => console.error("Email Error:", err));
+        }).then(() => console.log("--- ✅ EMAIL TRANSMITTED VIA API ---"))
+          .catch(err => console.error("--- ❌ EMAIL API ERROR:", err));
 
     } catch (e) {
-        console.error("Booking Logic Error:", e);
+        console.error("BOOKING LOGIC ERROR:", e);
         res.status(500).json({ success: false });
     }
 });
 
-// Contact Form Route
-app.post('/contact', async (req, res) => {
-    try {
-        await transporter.sendMail({
-            from: `"Apollo Mission Control" <${process.env.GMAIL_USER}>`,
-            to: 'mandiek028@gmail.com',
-            subject: `✉️ MESSAGE: ${req.body.name}`,
-            text: `From: ${req.body.name}\nEmail: ${req.body.email}\n\n${req.body.message}`
-        });
-        res.json({ success: true });
-    } catch (e) { res.json({ success: true }); }
+// Simple Contact Route (Backgrounded)
+app.post('/contact', (req, res) => {
+    res.json({ success: true });
+    resend.emails.send({
+        from: 'Apollo Inn <onboarding@resend.dev>',
+        to: 'mandiek028@gmail.com',
+        subject: `✉️ MESSAGE: ${req.body.name}`,
+        text: `From: ${req.body.name}\nEmail: ${req.body.email}\n\n${req.body.message}`
+    }).catch(e => console.error(e));
 });
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Titan v1.1 Active on Port ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`--- 🚀 TITAN V1.1 ACTIVE ON PORT ${PORT} ---`));
