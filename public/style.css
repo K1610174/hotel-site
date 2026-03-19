@@ -87,4 +87,9 @@ footer { background: var(--obsidian); display: grid; grid-template-columns: 1fr 
 .f-col { padding: 60px; border-right: 1px solid #222; }
 .f-map { filter: contrast(1.1) saturate(0.9); height: 100%; min-height: 400px; background: #e5e3df; }
 
+/* --- NEW ADDITION: DATE VALIDATION STYLES --- */
+.m-warning { color: #ff4d4d; font-size: 11px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+input:invalid { border-color: #ff4d4d; }
+#sBtn:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
+
 @media (max-width: 1000px) { footer { grid-template-columns: 1fr; } .m-highlight-side { display: none; } .m-box { height: auto; max-height: 90vh; } }

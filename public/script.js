@@ -103,3 +103,38 @@ document.getElementById('contactForm').onsubmit = async (e) => {
         document.getElementById('contactForm').reset();
     }
 };
+
+/* --- NEW ADDITION: CALENDAR LOCKDOWN LOGIC --- */
+document.addEventListener('DOMContentLoaded', () => {
+    const cin = document.getElementById('cin');
+    const cout = document.getElementById('cout');
+    const btn = document.getElementById('sBtn');
+    const warn = document.createElement('div');
+    warn.id = 'date-warning';
+    warn.className = 'm-warning';
+    
+    // Inject warning box above the button
+    btn.parentNode.insertBefore(warn, btn);
+
+    // 1. Lockdown: No Past Dates
+    const today = new Date().toISOString().split('T')[0];
+    cin.setAttribute('min', today);
+    cout.setAttribute('min', today);
+
+    // 2. Logic: Overlap & Sequence Check
+    const validate = () => {
+        warn.innerText = "";
+        btn.disabled = false;
+
+        if (cin.value && cout.value) {
+            if (cout.value <= cin.value) {
+                warn.innerText = "MISSION ERROR: CHECK-OUT MUST BE AFTER CHECK-IN";
+                btn.disabled = true;
+            }
+            // Note: Add MongoDB overlap check here later if needed
+        }
+    };
+
+    cin.addEventListener('change', validate);
+    cout.addEventListener('change', validate);
+});

@@ -120,4 +120,15 @@ app.post('/contact', (req, res) => {
     }).catch(e => console.error(e));
 });
 
+/* --- NEW ADDITION: SERVER-SIDE VALIDATION --- */
+app.use('/reserve', (req, res, next) => {
+    if (req.method === 'POST') {
+        const { checkIn, checkOut } = req.body;
+        if (new Date(checkOut) <= new Date(checkIn)) {
+            return res.status(400).json({ success: false, message: "Invalid Date Sequence" });
+        }
+    }
+    next();
+});
+
 app.listen(PORT, '0.0.0.0', () => console.log(`--- 🚀 TITAN V1.1 ACTIVE ON PORT ${PORT} ---`));
