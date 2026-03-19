@@ -1,14 +1,34 @@
 require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// --- 1. DATABASE CONNECTION (THE BRAIN) ---
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("--- 🛰️ APOLLO DATABASE LINKED ---"))
+    .catch(err => console.error("--- ⚠️ DATABASE OFFLINE:", err));
+
+// --- 2. BOOKING SCHEMA ---
+const bookingSchema = new mongoose.Schema({
+    guestName: String,
+    gEmail: String,
+    suiteType: String,
+    checkIn: Date,
+    checkOut: Date,
+    totalPrice: Number,
+    status: { type: String, default: 'pending' }, 
+    createdAt: { type: Date, default: Date.now }
+});
+const Booking = mongoose.model('Booking', bookingSchema);
+
+// --- 3. MIDDLEWARE ---
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Secure Transporter Configuration
+// --- 4. EMAIL TRANSPORTER ---
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -20,63 +40,74 @@ const transporter = nodemailer.createTransport({
     tls: { rejectUnauthorized: false }
 });
 
+// --- 5. ROUTES ---
+
+// NEW: Check for blocked dates (The "Calendar Intelligence")
+app.get('/booked-dates', async (req, res) => {
+    try {
+        const bookings = await Booking.find({ status: { $ne: 'cancelled' } });
+        res.json(bookings.map(b => ({ start: b.checkIn, end: b.checkOut })));
+    } catch (e) { res.status(500).json([]); }
+});
+
+// UPDATED: Reserve Suite (Saves to DB + Sends Mission Brief)
 app.post('/reserve', async (req, res) => {
     const { guestName, gEmail, suiteType, checkIn, checkOut } = req.body;
     
     const pricing = { 'The Atelier': 120, 'The Studio': 100, 'The Loft': 150 };
-    const rate = pricing[suiteType] || 0;
     const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)) || 0;
-    const total = nights * rate;
-
-    // This creates a "One-Click" reply link for the host
-    const mailtoLink = `mailto:${gEmail}?subject=Booking Confirmed: Apollo Inn&body=Hello ${guestName},%0D%0A%0D%0AThis is to confirm your mission to Apollo Inn in the ${suiteType}.%0D%0A%0D%0ADates: ${checkIn} to ${checkOut}%0D%0ATotal: $${total}%0D%0A%0D%0AWe look forward to your arrival!`;
-
-    const htmlMissionBrief = `
-        <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #333; background-color: #fff;">
-            <div style="background-color: #050505; color: #FF8800; padding: 20px; text-align: center;">
-                <h1 style="margin: 0; letter-spacing: 2px;">APOLLO INN</h1>
-                <p style="margin: 5px 0 0; font-size: 10px; color: #EAE9E4; text-transform: uppercase;">Reservation Mission Brief</p>
-            </div>
-            <div style="padding: 30px;">
-                <h3 style="border-bottom: 2px solid #FF8800; padding-bottom: 10px;">GUEST INTEL</h3>
-                <p><strong>NAME:</strong> ${guestName ? guestName.toUpperCase() : 'N/A'}</p>
-                <p><strong>EMAIL:</strong> ${gEmail}</p>
-                
-                <h3 style="border-bottom: 2px solid #FF8800; padding-bottom: 10px; margin-top: 20px;">STAY DETAILS</h3>
-                <table style="width: 100%; font-size: 14px;">
-                    <tr><td style="padding: 5px 0;"><strong>SUITE:</strong></td><td>${suiteType}</td></tr>
-                    <tr><td style="padding: 5px 0;"><strong>CHECK-IN:</strong></td><td>${checkIn}</td></tr>
-                    <tr><td style="padding: 5px 0;"><strong>CHECK-OUT:</strong></td><td>${checkOut}</td></tr>
-                    <tr><td style="padding: 5px 0;"><strong>DURATION:</strong></td><td>${nights} Night(s)</td></tr>
-                    <tr style="font-size: 18px; color: #FF8800;">
-                        <td style="padding: 15px 0; border-top: 1px solid #eee;"><strong>TOTAL:</strong></td>
-                        <td style="padding: 15px 0; border-top: 1px solid #eee;"><strong>$${total}</strong></td>
-                    </tr>
-                </table>
-
-                <div style="margin-top: 30px; text-align: center;">
-                    <a href="${mailtoLink}" style="background-color: #FF8800; color: #000; padding: 15px 25px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">✅ APPROVE & REPLY TO GUEST</a>
-                </div>
-            </div>
-            <div style="background-color: #050505; color: #fff; padding: 15px; text-align: center; font-size: 12px;">
-                TITAN V1.1 PIPELINE ACTIVE
-            </div>
-        </div>
-    `;
+    const total = nights * (pricing[suiteType] || 0);
 
     try {
-        await transporter.sendMail({
+        // A. SAVE TO MONGODB
+        const newBooking = new Booking({
+            guestName, gEmail, suiteType,
+            checkIn: new Date(checkIn),
+            checkOut: new Date(checkOut),
+            totalPrice: total
+        });
+        await newBooking.save();
+
+        // B. PREPARE QUICK REPLY LINK
+        const mailtoLink = `mailto:${gEmail}?subject=Booking Confirmed: Apollo Inn&body=Hello ${guestName},%0D%0A%0D%0AThis is to confirm your mission to Apollo Inn in the ${suiteType}.%0D%0A%0D%0ADates: ${checkIn} to ${checkOut}%0D%0ATotal: $${total}%0D%0A%0D%0AWe look forward to your arrival!`;
+
+        const htmlMissionBrief = `
+            <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #333; background-color: #fff;">
+                <div style="background-color: #050505; color: #FF8800; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0; letter-spacing: 2px;">APOLLO INN</h1>
+                    <p style="margin: 5px 0 0; font-size: 10px; color: #EAE9E4; text-transform: uppercase;">Reservation Mission Brief</p>
+                </div>
+                <div style="padding: 30px;">
+                    <h3>GUEST INTEL</h3>
+                    <p><strong>NAME:</strong> ${guestName.toUpperCase()}</p>
+                    <p><strong>EMAIL:</strong> ${gEmail}</p>
+                    <hr>
+                    <h3>STAY DETAILS</h3>
+                    <p><strong>SUITE:</strong> ${suiteType}</p>
+                    <p><strong>DATES:</strong> ${checkIn} to ${checkOut} (${nights} Nights)</p>
+                    <p style="font-size: 20px; color: #FF8800;"><strong>TOTAL: $${total}</strong></p>
+                    <div style="margin-top: 25px; text-align: center;">
+                        <a href="${mailtoLink}" style="background-color: #FF8800; color: #000; padding: 15px 25px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">✅ APPROVE & REPLY</a>
+                    </div>
+                </div>
+                <div style="background-color: #050505; color: #fff; padding: 10px; text-align: center; font-size: 10px;">TITAN V1.1 PIPELINE ACTIVE | ID: ${newBooking._id}</div>
+            </div>
+        `;
+
+        // C. RESPOND TO FRONTEND IMMEDIATELY
+        res.json({ success: true, bookingId: newBooking._id });
+
+        // D. TRANSMIT EMAIL IN BACKGROUND
+        transporter.sendMail({
             from: `"Apollo Mission Control" <${process.env.GMAIL_USER}>`,
             to: 'mandiek028@gmail.com',
             subject: `🚨 NEW MISSION: $${total} - ${guestName}`,
-            html: htmlMissionBrief,
-            text: `New Booking: ${guestName} ($${total})`
-        });
-        console.log(`--- MISSION BRIEF TRANSMITTED: $${total} ---`);
-        res.json({ success: true });
-    } catch (e) { 
-        console.error("TRANSMISSION ERROR:", e.message);
-        res.json({ success: true }); 
+            html: htmlMissionBrief
+        }).catch(err => console.error("Email Error:", err));
+
+    } catch (e) {
+        console.error("Booking Logic Error:", e);
+        res.status(500).json({ success: false });
     }
 });
 
@@ -93,4 +124,4 @@ app.post('/contact', async (req, res) => {
     } catch (e) { res.json({ success: true }); }
 });
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Titan v1.1 Active: http://localhost:${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Titan v1.1 Active on Port ${PORT}`));
