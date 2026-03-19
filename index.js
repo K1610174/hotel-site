@@ -23,11 +23,13 @@ const transporter = nodemailer.createTransport({
 app.post('/reserve', async (req, res) => {
     const { guestName, gEmail, suiteType, checkIn, checkOut } = req.body;
     
-    // Suite pricing logic for server-side calculation
     const pricing = { 'The Atelier': 120, 'The Studio': 100, 'The Loft': 150 };
     const rate = pricing[suiteType] || 0;
     const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)) || 0;
     const total = nights * rate;
+
+    // This creates a "One-Click" reply link for the host
+    const mailtoLink = `mailto:${gEmail}?subject=Booking Confirmed: Apollo Inn&body=Hello ${guestName},%0D%0A%0D%0AThis is to confirm your mission to Apollo Inn in the ${suiteType}.%0D%0A%0D%0ADates: ${checkIn} to ${checkOut}%0D%0ATotal: $${total}%0D%0A%0D%0AWe look forward to your arrival!`;
 
     const htmlMissionBrief = `
         <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #333; background-color: #fff;">
@@ -38,7 +40,7 @@ app.post('/reserve', async (req, res) => {
             <div style="padding: 30px;">
                 <h3 style="border-bottom: 2px solid #FF8800; padding-bottom: 10px;">GUEST INTEL</h3>
                 <p><strong>NAME:</strong> ${guestName ? guestName.toUpperCase() : 'N/A'}</p>
-                <p><strong>EMAIL:</strong> <a href="mailto:${gEmail}" style="color: #FF8800;">${gEmail}</a></p>
+                <p><strong>EMAIL:</strong> ${gEmail}</p>
                 
                 <h3 style="border-bottom: 2px solid #FF8800; padding-bottom: 10px; margin-top: 20px;">STAY DETAILS</h3>
                 <table style="width: 100%; font-size: 14px;">
@@ -51,6 +53,10 @@ app.post('/reserve', async (req, res) => {
                         <td style="padding: 15px 0; border-top: 1px solid #eee;"><strong>$${total}</strong></td>
                     </tr>
                 </table>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="${mailtoLink}" style="background-color: #FF8800; color: #000; padding: 15px 25px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">✅ APPROVE & REPLY TO GUEST</a>
+                </div>
             </div>
             <div style="background-color: #050505; color: #fff; padding: 15px; text-align: center; font-size: 12px;">
                 TITAN V1.1 PIPELINE ACTIVE
