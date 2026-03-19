@@ -20,7 +20,11 @@
 
     <header class="hero"><h1>APOLLO INN</h1></header>
 
-    <section id="suites" class="section-header"><h2>The Suite Collection</h2><div class="orange-line"></div></section>
+    <section id="suites" class="section-header">
+        <h2>The Suite Collection</h2>
+        <div class="orange-line"></div>
+    </section>
+    
     <section class="suites-grid">
         <div class="suite-card" onclick="openM('The Atelier')">
             <img src="/images/suite1.jpg" alt="The Atelier Suite">
@@ -36,18 +40,50 @@
         </div>
     </section>
 
-    <section id="experience" class="section-header"><h2>Experience Apollo</h2><div class="orange-line"></div></section>
+    <section id="experience" class="section-header">
+        <h2>Experience Apollo</h2>
+        <div class="orange-line"></div>
+    </section>
+    
     <section class="light-grid">
-        <div class="light-tile"><img src="/images/dining.jpg" alt="Dining"><span class="light-tag">Dining</span><div class="light-intel"><p>Master chefs & local cuisine.</p></div></div>
-        <div class="light-tile"><img src="/images/bar.jpg" alt="The Bar"><span class="light-tag">The Bar</span><div class="light-intel"><p>Intimate premium spirits.</p></div></div>
-        <div class="light-tile"><img src="/images/conference.jpg" alt="Conference"><span class="light-tag">Conference</span><div class="light-intel"><p>Fiber WiFi hub.</p></div></div>
-        <div class="light-tile"><img src="/images/pergola.jpg" alt="The Pergola"><span class="light-tag">The Pergola</span><div class="light-intel"><p>Outdoor lounging escape.</p></div></div>
-        <div class="light-tile"><img src="/images/outdoor.jpg" alt="Outdoors"><span class="light-tag">Outdoors</span><div class="light-intel"><p>Manicured grounds.</p></div></div>
-        <div class="light-tile"><img src="/images/city.jpg" alt="City Hub"><span class="light-tag">City Hub</span><div class="light-intel"><p>Minutes from the city center.</p></div></div>
+        <div class="light-tile">
+            <img src="/images/dining.jpg" alt="Dining">
+            <span class="light-tag">Dining</span>
+            <div class="light-intel"><p>Master chefs & local cuisine.</p></div>
+        </div>
+        <div class="light-tile">
+            <img src="/images/bar.jpg" alt="The Bar">
+            <span class="light-tag">The Bar</span>
+            <div class="light-intel"><p>Intimate premium spirits.</p></div>
+        </div>
+        <div class="light-tile">
+            <img src="/images/conference.jpg" alt="Conference">
+            <span class="light-tag">Conference</span>
+            <div class="light-intel"><p>Fiber WiFi hub.</p></div>
+        </div>
+        <div class="light-tile">
+            <img src="/images/pergola.jpg" alt="The Pergola">
+            <span class="light-tag">The Pergola</span>
+            <div class="light-intel"><p>Outdoor lounging escape.</p></div>
+        </div>
+        <div class="light-tile">
+            <img src="/images/outdoor.jpg" alt="Outdoors">
+            <span class="light-tag">Outdoors</span>
+            <div class="light-intel"><p>Manicured grounds.</p></div>
+        </div>
+        <div class="light-tile">
+            <img src="/images/city.jpg" alt="City Hub">
+            <span class="light-tag">City Hub</span>
+            <div class="light-intel"><p>Minutes from the city center.</p></div>
+        </div>
     </section>
 
     <footer id="contact">
-        <div class="f-col"><h4>Info</h4><p>Fort Portal, Uganda</p><p>mandie028@gmail.com</p></div>
+        <div class="f-col">
+            <h4>Info</h4>
+            <p>Fort Portal, Uganda</p>
+            <p>mandie028@gmail.com</p>
+        </div>
         <div class="f-col">
             <h4>Message</h4>
             <form id="contactForm">
@@ -60,7 +96,7 @@
         </div>
         <div class="f-map">
             <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15959.030823528!2d30.2638883!3d0.654767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x17611ec573f00001%3A0x6d9f7596c507c588!2sFort%20Portal%2C%20Uganda!5e0!3m2!1sen!2s!4v1710812345678!5m2!1sen!2s" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15957.51448666504!2d30.267499!3d0.6625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1779e7894a44b361%3A0x7e502018a383d47f!2sFort%20Portal!5e0!3m2!1sen!2sug!4v1710777000000!5m2!1sen!2sug" 
                 width="100%" 
                 height="100%" 
                 style="border:0;" 
@@ -85,8 +121,14 @@
                         <input type="text" id="gName" placeholder="GUEST NAME" required>
                         <input type="email" id="gEmail" placeholder="EMAIL" required>
                         <div class="m-date-grid">
-                            <div class="m-date-col"><label>CHECK IN</label><input type="date" id="cin" required onchange="updateHighlight()"></div>
-                            <div class="m-date-col"><label>CHECK OUT</label><input type="date" id="cout" required onchange="updateHighlight()"></div>
+                            <div class="m-date-col">
+                                <label>CHECK IN</label>
+                                <input type="date" id="cin" required onchange="updateHighlight()">
+                            </div>
+                            <div class="m-date-col">
+                                <label>CHECK OUT</label>
+                                <input type="date" id="cout" required onchange="updateHighlight()">
+                            </div>
                         </div>
 
                         <div class="m-rules">

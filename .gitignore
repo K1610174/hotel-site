@@ -137,3 +137,11 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Security: Hide credentials
+.env
+
+# Dependencies: No need to upload these
+node_modules/
+npm-debug.log
+.DS_Store

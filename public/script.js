@@ -70,6 +70,7 @@ document.getElementById('bookForm').onsubmit = async (e) => {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             guestName: document.getElementById('gName').value,
+            gEmail: document.getElementById('gEmail').value, // This must exist in HTML
             suiteType: document.getElementById('sSel').value,
             checkIn: document.getElementById('cin').value,
             checkOut: document.getElementById('cout').value
