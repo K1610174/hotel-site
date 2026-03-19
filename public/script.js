@@ -1,18 +1,21 @@
 const suiteIntel = {
-    'The Atelier': { price: 120, img: '/images/suite1.jpg', desc: 'A masterclass in space and light for creators.', features: ['Queen Bed', 'Fiber WiFi', 'Mini Bar', 'Workstation', 'AC'] },
-    'The Studio': { price: 100, img: '/images/suite2.jpg', desc: 'Sleek, modern efficiency.', features: ['Full Bed', 'Smart TV', 'City View', 'Fiber WiFi', 'Shower'] },
-    'The Loft': { price: 150, img: '/images/suite3.jpg', desc: 'Panoramic views and ultimate luxury.', features: ['King Bed', 'Private Balcony', 'Bath Tub', 'Coffee Lounge', 'Vaulted'] }
+    'The Atelier': { price: 120, img: '/images/suite1.jpg', desc: 'Designed for the visionary traveler. A spacious creative hub with unmatched natural light.', features: ['Queen Bed', 'Fiber WiFi', 'Mini Bar', 'Workstation', 'AC Unit'] },
+    'The Studio': { price: 100, img: '/images/suite2.jpg', desc: 'Minimalist luxury at its finest. High-end finishes meet modern efficiency.', features: ['Full Bed', 'Smart TV', 'City View', 'Fiber WiFi', 'Glass Shower'] },
+    'The Loft': { price: 150, img: '/images/suite3.jpg', desc: 'The summit of Apollo Inn. Elevated views and expansive private living space.', features: ['King Bed', 'Private Balcony', 'Bath Tub', 'Coffee Lounge', 'Vaulted Ceilings'] }
 };
 
 const sSel = document.getElementById('sSel');
-Object.keys(suiteIntel).forEach(s => {
-    let opt = document.createElement('option');
-    opt.value = s; opt.innerText = `${s} - $${suiteIntel[s].price}/night`;
-    sSel.appendChild(opt);
-});
+if (sSel) {
+    Object.keys(suiteIntel).forEach(s => {
+        let opt = document.createElement('option');
+        opt.value = s; opt.innerText = `${s.toUpperCase()} — $${suiteIntel[s].price} / NIGHT`;
+        sSel.appendChild(opt);
+    });
+}
 
 function openM(n = 'The Atelier') {
-    document.getElementById('bookModal').style.display = 'flex';
+    const modal = document.getElementById('bookModal');
+    modal.style.display = 'flex';
     document.getElementById('sSel').value = n;
     updateHighlight();
 }
@@ -50,7 +53,7 @@ function calc() {
     if(cin && cout) {
         const days = (new Date(cout) - new Date(cin)) / 86400000;
         if(days > 0) {
-            btn.innerText = `CONFIRM - $${days * suiteIntel[s].price}`;
+            btn.innerText = `CONFIRM MISSION — $${days * suiteIntel[s].price}`;
             return;
         }
     }
@@ -61,7 +64,6 @@ document.getElementById('bookForm').onsubmit = async (e) => {
     e.preventDefault();
     const status = document.getElementById('status');
     status.innerText = "TRANSMITTING DATA...";
-    status.style.color = "var(--apollo-orange)";
     
     const res = await fetch('/reserve', {
         method: 'POST',
@@ -73,8 +75,10 @@ document.getElementById('bookForm').onsubmit = async (e) => {
             checkOut: document.getElementById('cout').value
         })
     });
-    if((await res.json()).success) {
-        status.innerText = "RESERVATION SUCCESSFUL.";
+    const result = await res.json();
+    if(result.success) {
+        status.innerText = "MISSION CONFIRMED. PREPARING ARRIVAL.";
+        status.style.color = "var(--apollo-orange)";
         setTimeout(() => closeM(true), 2500);
     }
 };
@@ -92,8 +96,9 @@ document.getElementById('contactForm').onsubmit = async (e) => {
             message: document.getElementById('cMsg').value
         })
     });
-    if((await res.json()).success) {
-        s.innerText = "MESSAGE SENT SUCCESSFULLY.";
+    const result = await res.json();
+    if(result.success) {
+        s.innerText = "TRANSMISSION RECEIVED.";
         document.getElementById('contactForm').reset();
     }
 };
